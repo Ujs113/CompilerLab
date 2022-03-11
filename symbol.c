@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"stack.h"
 
 
 char types[][10] = {"int", "float", "char", "double", "void", "auto", "unsigned", "long", "const"};
@@ -65,44 +64,58 @@ int hasSpecChar(char* str)
     return 0;
 }
 
-// void clean(char* str)
-// {
-//     char* tmp = (char*)malloc(strlen(str));
-//     for(int i = 0; i < strlen(str); i++)
-//     {
-//         tmp[i] = str[i];
-//         if(isSpecChar(str[i]))
-//         {
-//             tmp[i] = '\0';
-//             break;
-//         }
-//     }
-
-//     strcpy(str, tmp);
-// }
-
-char clean(char* str)
+void clean(char* str)
 {
     char* tmp = (char*)malloc(strlen(str));
-    char c;
     for(int i = 0; i < strlen(str); i++)
     {
         tmp[i] = str[i];
         if(isSpecChar(str[i]))
         {
-            c = str[i];
             tmp[i] = '\0';
             break;
         }
     }
+
     strcpy(str, tmp);
-    return c;
+}
+
+int hasBraces(char* str)
+{
+    for(int i = 0; i < strlen(str); i++)
+    {
+        if (str[i] == '(')
+            return 1;
+    }
+    return 0;
+}
+
+void split(char* str, char* str2, char delim)
+{
+    int i;
+    char* tmp = (char*)malloc(strlen(str));
+    for(i = 0; i < strlen(str); i++)
+    {
+        tmp[i] = str[i];
+        if(isSpecChar(str[i]))
+        {
+            tmp[i] = '\0';
+            break;
+        }
+    }
+    ++i;
+    for(int j = 0; i < strlen(str); i++, j++)
+    {
+        str2[j] = str[i];
+    }
+
+    strcpy(str, tmp);
 }
 
 int main(int argc, char* argv[])
 {
     FILE* file = fopen(argv[1], "r");
-    char buf[100], tmp[100];
+    char buf[100], tmp[100], str2[100];
     
     if(file == NULL)
     {
@@ -110,20 +123,22 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    stack s;
-    init_stack(&s, 100);
-
     int flag = 0;
     char type[10];
     char varname[100];
     while(fscanf(file, "%s", buf) != EOF)
     {
+        memset(str2, 0, 100);
         strcpy(tmp, buf);
+        if(hasBraces(buf))
+        {
+            split(buf, str2, '(');
+            
+        }
         clean(buf);
         if(isType(buf))
         {
             printf("%s\t", tmp);
-            //push(&s, buf);
             flag = 1;
         }
         if(flag && isSpecChar(buf))
@@ -134,6 +149,11 @@ int main(int argc, char* argv[])
         {
             printf("%s\n", buf);
             flag = 0;
+        }
+        if(str2[0] != 0)
+        {
+            printf("%s\t", str2);
+            flag = 1;
         }
     }
 
