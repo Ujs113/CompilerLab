@@ -80,11 +80,11 @@ void clean(char* str)
     strcpy(str, tmp);
 }
 
-int hasBraces(char* str)
+int hasChar(char* str, char c)
 {
     for(int i = 0; i < strlen(str); i++)
     {
-        if (str[i] == '(')
+        if (str[i] == c)
             return 1;
     }
     return 0;
@@ -123,48 +123,82 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    int flag = 0;
+    int flag = 0, i = 0;
+    char excepts[] = {'-', '.'};
     char type[10];
     char varname[100];
+    char scope[100];
+    char ttype[100][10];
+    char idname[100][100];
+    char tscope[100][100];
+    char tdefault[100][100];
+    strcpy(scope, "global");
     while(fscanf(file, "%s", buf) != EOF)
     {
         memset(str2, 0, 100);
         strcpy(tmp, buf);
-        if(hasBraces(buf))
+        if(hasChar(buf, '('))
         {
             split(buf, str2, '(');
-            
         }
-        clean(buf);
+        if(hasChar(buf, '}'))
+        {
+            strcpy(scope, "global");
+        }
+
+        if(hasChar(buf, '='))
+        {
+            flag = 2;
+        }
+        
+        if(flag != 2)
+        {
+            clean(buf);
+            clean(str2);
+        }
+
         if(isType(buf))
         {
-            printf("%s\t", tmp);
-            flag = 1;
+            if(!flag)
+            {
+                strcpy(ttype[i], tmp);
+                strcpy(tscope[i], scope);
+                flag = 1;
+            }
+            else
+            {
+                strcat(ttype[i], " ");
+                strcat(ttype[i], tmp);
+            }
+            
         }
-        if(flag && isSpecChar(buf))
+        else if(flag == 1 && !isKeyword(buf))
         {
             flag = 0;
+            strcpy(idname[i], buf);
+            ++i;
         }
-        if(flag && !isKeyword(buf))
+        if(flag == 2 && strcmp(buf, "=") != 0)
         {
-            printf("%s\n", buf);
+            buf[strlen(buf) - 1] = '\0';    //Removes the semicolon at the end because we don't call clean for this case
+            strcpy(tdefault[i - 1], buf);
             flag = 0;
         }
-        if(str2[0] != 0)
+        if(isType(str2))
         {
-            printf("%s\t", str2);
+            strcpy(scope, buf);
             flag = 1;
+            strcpy(ttype[i], str2);
+            strcpy(tscope[i], buf);
         }
+    }
+
+    int len = i;
+
+    for(int i = 0; i < len; i++)
+    {
+        printf("%s\t%s\t%s\t%s\n", tscope[i], ttype[i], idname[i], tdefault[i]);
     }
 
     return 0;
 }
-
-/*
-
-TODO: Check if a given input is a function.
-How?
-Suggestion:
-When cleaning if the special character is '(', then parse input until ')' is found. Then it is function.
-
-*/
