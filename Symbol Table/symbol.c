@@ -187,7 +187,6 @@ int main(int argc, char* argv[])
         }
         if(isType(str2))
         {
-            strcpy(scope, buf);
             flag = 1;
             strcpy(ttype[i], str2);
             strcpy(tscope[i], buf);
