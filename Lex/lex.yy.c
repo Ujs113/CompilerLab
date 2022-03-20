@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 2
-#define YY_END_OF_BUFFER 3
+#define YY_NUM_RULES 6
+#define YY_END_OF_BUFFER 7
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,7 +362,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[11] =
     {   0,
-        0,    0,    3,    2,    2,    0,    0,    0,    1,    0
+        0,    0,    7,    6,    5,    4,    3,    2,    1,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -370,17 +370,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    3,    1,    4,    4,    1,    4,    4,    4,
+        1,    1,    3,    1,    3,    3,    3,    3,    1,    3,
+        3,    3,    1,    3,    3,    3,    1,    4,    4,    4,
         4,    4,    4,    4,    4,    4,    4,    1,    1,    1,
-        1,    1,    1,    5,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        1,    1,    1,    1,    3,    1,    4,    4,    4,    4,
+        1,    1,    3,    3,    5,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        1,    1,    1,    3,    3,    1,    6,    6,    6,    6,
 
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    1,    1,    1,    1,    1,    1,    1,    1,
+        6,    6,    6,    6,    6,    6,    6,    6,    6,    6,
+        6,    6,    6,    6,    6,    6,    6,    6,    6,    6,
+        6,    6,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -397,33 +397,31 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[6] =
+static const YY_CHAR yy_meta[7] =
     {   0,
-        1,    1,    2,    3,    2
+        1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[14] =
+static const flex_int16_t yy_base[11] =
     {   0,
-        0,    0,   14,   15,    8,    7,    0,    9,   15,   15,
-        4,    6,    7
+        0,    0,    7,    8,    8,    8,    8,    8,    8,    8
     } ;
 
-static const flex_int16_t yy_def[14] =
+static const flex_int16_t yy_def[11] =
     {   0,
-       11,   11,   10,   10,   12,   12,   13,   13,   10,    0,
-       10,   10,   10
+       10,    1,   10,   10,   10,   10,   10,   10,   10,    0
     } ;
 
-static const flex_int16_t yy_nxt[21] =
+static const flex_int16_t yy_nxt[15] =
     {   0,
-       10,   10,    5,    5,    4,    4,    4,    6,    6,    8,
-        9,    7,    7,   10,    3,   10,   10,   10,   10,   10
+        4,    5,    6,    7,    8,    9,   10,    3,   10,   10,
+       10,   10,   10,   10
     } ;
 
-static const flex_int16_t yy_chk[21] =
+static const flex_int16_t yy_chk[15] =
     {   0,
-        0,    0,    2,    2,   11,   11,   11,   12,   12,   13,
-        8,    6,    5,    3,   10,   10,   10,   10,   10,   10
+        1,    1,    1,    1,    1,    1,    3,   10,   10,   10,
+       10,   10,   10,   10
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -440,8 +438,12 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "email.l"
-#line 444 "lex.yy.c"
+#line 1 "password.l"
+#line 2 "password.l"
+    int lcount = 0, ucount = 0, dcount = 0, scount = 0, ccount = 0;
+
+#line 445 "lex.yy.c"
+#line 446 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -621,9 +623,6 @@ extern int yylex (void);
 #endif
 
 #define YY_RULE_SETUP \
-	if ( yyleng > 0 ) \
-		YY_CURRENT_BUFFER_LVALUE->yy_at_bol = \
-				(yytext[yyleng - 1] == '\n'); \
 	YY_USER_ACTION
 
 /** The main scanner function which does all the work.
@@ -661,9 +660,9 @@ YY_DECL
 		}
 
 	{
-#line 1 "email.l"
+#line 5 "password.l"
 
-#line 666 "lex.yy.c"
+#line 665 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -678,7 +677,6 @@ YY_DECL
 		yy_bp = yy_cp;
 
 		yy_current_state = (yy_start);
-		yy_current_state += YY_AT_BOL();
 yy_match:
 		do
 			{
@@ -697,7 +695,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 15 );
+		while ( yy_base[yy_current_state] != 8 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -722,19 +720,38 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case 1:
-*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
-(yy_c_buf_p) = yy_cp -= 1;
-YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 2 "email.l"
-printf("Valid E-mail id");
+#line 6 "password.l"
+{lcount++; ccount++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 3 "email.l"
+#line 7 "password.l"
+{ucount++; ccount++;}
+	YY_BREAK
+case 3:
+YY_RULE_SETUP
+#line 8 "password.l"
+{dcount++; ccount++;}
+	YY_BREAK
+case 4:
+YY_RULE_SETUP
+#line 9 "password.l"
+{scount++; ccount++;}
+	YY_BREAK
+case 5:
+/* rule 5 can match eol */
+YY_RULE_SETUP
+#line 10 "password.l"
+{if(lcount > 0 && ucount > 0 && dcount >0 && scount >0 && ccount >= 8) printf("Valid Password\n");
+        lcount = ucount = dcount = scount = ccount = 0;}
+	YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 12 "password.l"
 ECHO;
 	YY_BREAK
-#line 737 "lex.yy.c"
+#line 754 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1019,7 +1036,6 @@ static int yy_get_next_buffer (void)
 	char *yy_cp;
     
 	yy_current_state = (yy_start);
-	yy_current_state += YY_AT_BOL();
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
@@ -1179,8 +1195,6 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
-
-	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = (c == '\n');
 
 	return c;
 }
@@ -1742,7 +1756,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 3 "email.l"
+#line 12 "password.l"
 
 int yywrap(void)
 {
