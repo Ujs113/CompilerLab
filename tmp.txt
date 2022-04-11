@@ -1,0 +1,10 @@
+| CHAR
+    | FLOAT
+    | VOID
+    | DOUBLE
+    | UNSIGNED
+    | LONG
+    | SHORT
+
+float b;
+char c;
