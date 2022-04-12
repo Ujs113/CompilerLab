@@ -7,7 +7,7 @@
 
 "char"  {return(CHAR);}
 "const" {return(CONST);}
-"int"   {return(INT); printf("int")}
+"int"   {return(INT);}
 "float" {return(FLOAT);}
 "void"  {return(VOID);}
 "double"    {return(DOUBLE);}
@@ -15,13 +15,13 @@
 "short" {return(SHORT);}
 "long"  {return(LONG);}
 "volatile"  {return(VOLATILE);}
-[a-zA-Z_]([a-zA-Z_]|[0-9])* {return(IDENTIFIER); ECHO;}
+[a-zA-Z_]([a-zA-Z_]|[0-9])* {return(IDENTIFIER);}
 \".*\"  {return(STRING);}
 -?[0-9]+.?[0-9]*    {return(CONSTANT);}
 \'.\'   {return(CONSTANT);}
-"," {return(",");}
-";" {return(";"); ECHO;}
-"=" {return("=");}
+"," {return(',');}
+";" {return(';');}
+"=" {return('=');}
 
 %%
 

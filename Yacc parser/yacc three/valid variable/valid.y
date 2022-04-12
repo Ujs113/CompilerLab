@@ -1,0 +1,38 @@
+%{
+#include<stdio.h>
+#include<ctype.h>
+%}
+
+%token let dig
+
+%%
+sad: let recld '\n' {printf("accepted\n");exit(0);}
+| let '\n' {printf("accepted!!\n");exit(0);}
+|
+|error {yyerror(" rejected\n");}
+;
+recld: let recld
+| dig recld
+| let
+| dig
+;
+%%
+yylex(){
+ char ch;
+ while((ch=getchar())==' ');
+ if(isalpha(ch)){
+  return let;
+ }
+ if(isdigit(ch)){
+  return dig;
+    
+ }
+ return ch;
+}
+yyerror(char* s){
+ printf("%s",s);
+}
+main(){
+ printf("Enter a variable: ");
+ yyparse();
+}
