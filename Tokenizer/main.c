@@ -1,15 +1,12 @@
-#include<stdio.h>
-
 void sample(float a)
 {
     int x;
 }
 
-int main(int argc, char* argv)
+int main()
 {
     int a = -10;
     float b = 2.0;
-    char c = 'a';
-    int* ptr;
+    char c;
     return a;
 }

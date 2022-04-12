@@ -1,11 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 
 
 struct token {
-    char* type;
-    char* value;
+    char type[100];
+    char value[100];
 };
 
 char types[][10] = {"int", "float", "char", "double", "void", "auto", "unsigned", "long", "const"};
@@ -21,9 +22,9 @@ char special[] = {'~', '|', '#', '$', '%', '^', '&',
                    '*', '(', ')', '_', '+', '!', '\\',
                    '`', '-', '=', '{', '}', '[', ']',
                    ':', '"', ';', '<', '>', '?', ',',
-                   '.', '/' };
+                   '.', '/', ' ', '\n', '\t'};
 
-char operator[] = { '+', '-', '/', '*', '!', '|', '<', '>', '%', '&', '=' };
+char operator[] = { '+', '-', '/', '*', '!', '|', '<', '>', '%', '&', '=', '{', '}', '(', ')'};
 
 int isType(char* word)
 {
@@ -132,10 +133,10 @@ void split(char* str, char* str2, char delim)
 
 int main(int argc, char* argv[])
 {
-    printf("%s", argv[1]);
     FILE* file = fopen(argv[1], "r");
-    char ch, buf[100];
-    struct token t;
+    char *buf;
+    size_t buflen;
+    
 
     if(file == NULL)
     {
@@ -143,39 +144,39 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    int i = 0;
+    FILE* out = open_memstream(&buf, &buflen);
 
-    while((ch = fgetc(file)) != EOF)
+    for(;;)
     {
-        printf("%c", ch);
-        if(!isSpecChar(ch))
-        {
-            buf[i] = ch;
-            i++;
-        }
-        else
-        {
-            if(isKeyword(buf))
-            {
-                strcpy(t.type, "keyword");
-                strcpy(t.value, buf);
-            }
-            else
-            {
-                strcpy(t.type, "identifier");
-                strcpy(t.value, buf);
-            }
+        char tmp[4096];
+        int n = fread(tmp, 1, sizeof(tmp), file);
+        if(n == 0)
+            break;
+        fwrite(tmp, 1, n, out);
+    }
 
-            if(isOperator(ch))
-            {
-                strcpy(t.type, "operator");
-                strcpy(t.value, ch);
-            }
+    fclose(file);
 
-            i = 0;
+    fflush(out);
+    fputc('\0', out);
+    fclose(out);
+
+    char* p = buf;
+
+    while(*p)
+    {
+        if(*p == '\n')
+        {
+            p++;
+            continue;
         }
 
-        printf("%s\t%s", t.type, t.value);
+        if(isspace(*p))
+        {
+            p++;
+            continue;
+        }
+
 
     }
 
