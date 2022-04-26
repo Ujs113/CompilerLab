@@ -28,6 +28,34 @@ int union_of(char *s1, char* s2)
     return 0;
 }
 
+int difference(char* s1, char s2)
+{
+    // char* tmp = (char*)malloc((strlen(s1) + 1) * sizeof(char));
+    for(int i = 0; i < strlen(s1); i++)
+    {
+        if(s1[i] == s2)
+        {
+            int j;
+            for(j = i; j < strlen(s1) - 1; j++)
+            {
+                s1[j] = s1[j + 1];
+            }
+            s1[j + 1] = '\0';
+            break;
+        }
+    }
+}
+
+int in(char* s1, char s2)
+{
+    for(int i = 0; i < strlen(s1); i++)
+    {
+        if(s1[i] == s2)
+            return i;
+    }
+    return -1;
+}
+
 int nullable(char nt, production* prods, int n)
 {
     int flag = 0;
@@ -56,7 +84,7 @@ int nullable(char nt, production* prods, int n)
 char* first(char symbol, production* rules, int n)
 {
     char *firsts = (char*)malloc(n * sizeof(char));
-    if(islower(symbol))
+    if(!isupper(symbol))
     {
         union_op(firsts, symbol);// Return the symbol itself
         return firsts;
@@ -66,26 +94,27 @@ char* first(char symbol, production* rules, int n)
     {
         if(nullable(symbol, rules, n))
         {
-            union_op(firsts, '~');// Add epsilon('~') to first
+            union_op(firsts, '~');
         }
         for(int i = 0; i < n; i++)
         {
             if(rules[i].head == symbol)
             {
                 if(islower(rules[i].sub[0]))
-                    union_op(firsts, rules[i].sub[0]);//Add rules[i].sub[0] to first
+                    union_op(firsts, rules[i].sub[0]);
                 else
                 {
                     int j = 0;
                     while(j < strlen(rules[i].sub))
                     {
                         char* x = first(rules[i].sub[j], rules, n);
-                        union_of(firsts, x);//Add first(rules[i].sub[j]) to first except epsilon
-                        j++;
+                        difference(x, '~');
+                        union_of(firsts, x);
                         if(!nullable(rules[i].sub[j], rules, n))
                         {
                             break;
                         }
+                        j++;
                     }
                 }
                 
@@ -95,7 +124,39 @@ char* first(char symbol, production* rules, int n)
     return firsts;
 }
 
-char* follow(char subst);
+char* follow(char symobl, production* rules, int n)
+{
+    char *follows = (char*)malloc(n * sizeof(char));
+    if(symobl == 'S')
+    {
+        union_op(follows, '$');
+    }
+    for(int i = 0; i < n; i++)
+    {
+        int index = in(rules[i].sub, symobl);
+        if(index >= 0)
+        {
+            if(rules[i].sub[index + 1] != '\n' && rules[i].sub[index + 1] != '\0')
+            {
+                if(in(first(rules[i].sub[index + 1], rules, n), '~'))
+                {
+                    union_of(follows, first(rules[i].sub[index + 1], rules, n));
+                    difference(follows, '~');
+                    union_of(follows, follow(rules[i].head, rules, n));
+                }
+                else
+                {
+                    union_of(follows, first(rules[i].sub[index + 1], rules, n));
+                }
+            }
+            else
+            {
+                union_op(follows, '$');
+            }
+        }
+    }
+    return follows;
+}
 
 void getProds(production* prods, int n)
 {
@@ -117,13 +178,14 @@ void printProd(production prod)
 int main()
 {
     int n;
+    char *visited;
     production* rules;
 
-    printf("Enter the number of productinos: ");
+    printf("Enter the number of productions: ");
     scanf("%d", &n);
     fgetc(stdin);
     rules = (production*) malloc(n * sizeof(production));
-    
+    visited = (char*)malloc(n * sizeof(char));
     getProds(rules, n);
 
     for(int i = 0; i < n; i++)
@@ -132,22 +194,41 @@ int main()
         printProd(rules[i]);
     }
 
-    for(int i = 0; i < n; i++)
-    {
-        printf("%c\t%d\n", rules[i].head, nullable(rules[i].head, rules, n));
-    }
-
     printf("Firsts\n");
     for(int i = 0; i < n; i++)
     {
-        char *x;
-        x = first(rules[i].head, rules, n);
-        printf("%c\t", rules[i].head);
-        for(int j = 0; j < strlen(x); j++)
+        if(in(visited, rules[i].head) < 0)
         {
-            printf("%c\t", x[j]);
+            char *x;
+            x = first(rules[i].head, rules, n);
+            printf("%c\t", rules[i].head);
+            for(int j = 0; j < strlen(x); j++)
+            {
+                printf("%c\t", x[j]);
+            }
+            printf("\n");
+            union_op(visited, rules[i].head);
         }
-        printf("\n");
+    }
+
+    memset(visited, 0, strlen(visited) + 1);
+
+    printf("Follows\n");
+    for(int i = 0; i < n; i++)
+    {
+        if(in(visited, rules[i].head) < 0)
+        {
+            char *x;
+            x = follow(rules[i].head, rules, n);
+            printf("%c\t", rules[i].head);
+            for(int j = 0; j < strlen(x); j++)
+            {
+                printf("%c\t", x[j]);
+            }
+            printf("\n");
+            union_op(visited, rules[i].head);
+        }
+        
     }
 
     return 0;
