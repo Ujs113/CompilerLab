@@ -30,7 +30,6 @@ int union_of(char *s1, char* s2)
 
 int difference(char* s1, char s2)
 {
-    // char* tmp = (char*)malloc((strlen(s1) + 1) * sizeof(char));
     for(int i = 0; i < strlen(s1); i++)
     {
         if(s1[i] == s2)
@@ -86,7 +85,7 @@ char* first(char symbol, production* rules, int n)
     char *firsts = (char*)malloc(n * sizeof(char));
     if(!isupper(symbol))
     {
-        union_op(firsts, symbol);// Return the symbol itself
+        union_op(firsts, symbol);
         return firsts;
     }
         
@@ -124,16 +123,16 @@ char* first(char symbol, production* rules, int n)
     return firsts;
 }
 
-char* follow(char symobl, production* rules, int n)
+char* follow(char symbol, production* rules, int n)
 {
     char *follows = (char*)malloc(n * sizeof(char));
-    if(symobl == 'S')
+    if(symbol == 'S')
     {
         union_op(follows, '$');
     }
     for(int i = 0; i < n; i++)
     {
-        int index = in(rules[i].sub, symobl);
+        int index = in(rules[i].sub, symbol);
         if(index >= 0)
         {
             if(rules[i].sub[index + 1] != '\n' && rules[i].sub[index + 1] != '\0')
